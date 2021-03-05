@@ -6,7 +6,7 @@ package com.example;
 public class TicTacToeBoard {
 
   //set to fixed size until I can figure out how to assign it during creation
-  private char[][] gameGrid = new char[3][3];
+  private char[][] gameGrid;
   private int boardLength;
 
   //initialize variables to track characters and # of completed rows
@@ -25,7 +25,7 @@ public class TicTacToeBoard {
     //check length of input string
     assert (Math.sqrt(board.length()) % 1 == 0 && board.length() > 8) : "Invalid Board Dimensions";
     boardLength = (int) Math.sqrt(board.length());
-
+    gameGrid  = new char[boardLength][boardLength];
     //check characters of string and add them to grid, counting Xs and Os
     for (int i = 0; i < boardLength; i++) {
       for (int j = 0; j < boardLength; j++) {

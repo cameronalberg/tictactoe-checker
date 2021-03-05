@@ -23,19 +23,19 @@ public class TicTacToeBoardTest {
   }
 
   @Test
-  public void testFullBoardXWinsHorizontal() {
+  public void testPartialBoardXWinsHorizontal() {
     TicTacToeBoard board = new TicTacToeBoard(".xo.xo.x.");
     assertEquals(Evaluation.Xwins, board.evaluate());
   }
 
   @Test
-  public void testFullBoardXWinsVertical() {
+  public void testPartialBoardXWinsVertical() {
     TicTacToeBoard board = new TicTacToeBoard("xxx..o.Oo");
     assertEquals(Evaluation.Xwins, board.evaluate());
   }
 
   @Test
-  public void testFullBoardOWinsVertical() {
+  public void testPartialBoardOWinsVertical() {
     TicTacToeBoard board = new TicTacToeBoard("ooo..x.xX");
     assertEquals(Evaluation.Owins, board.evaluate());
   }
