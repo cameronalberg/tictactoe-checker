@@ -7,8 +7,11 @@ import java.util.Locale;
  */
 public class TicTacToeBoard {
 
+  //set to fixed size until I can figure out how to assign it during creation
   private char[][] grid = new char[3][3];
   private double board_length;
+
+  //initalize variables to track characters and # of completed rows
   private int xcount = 0;
   private int ocount = 0;
   private int xwins = 0;
@@ -46,7 +49,7 @@ public class TicTacToeBoard {
       result = '0';
       return;
     }
-    //check if X or O wins
+    //check if X or O wins, track wins with xwins and owins
     for (int i = 0; i < board_length; i++)
     {
       for (int j = 0; j < board_length; j++) {
@@ -60,6 +63,8 @@ public class TicTacToeBoard {
         }
       }
     }
+
+    //check that # of wins are valid
     if (owins > 0 && xwins == 0) {
       result = 'o';
     }
@@ -68,6 +73,7 @@ public class TicTacToeBoard {
     }
   }
 
+  //checks characters horizontally, matching to starting character
   private char HorizontalCheck(int row, int column) {
     char player_win = '0';
     for (int j = 0; j < board_length - 1; j++)
@@ -79,6 +85,8 @@ public class TicTacToeBoard {
     player_win = grid[row][column];
     return player_win;
   }
+
+  //checks characters vertically, matching to starting character
   private char VerticalCheck(int row, int column) {
     char player_win = '0';
     for (int i = 0; i < board_length - 1; i++)
@@ -91,6 +99,7 @@ public class TicTacToeBoard {
     return player_win;
   }
 
+  //checks characters diagonally, matching to starting character
   private char DiagonalCheck(int row, int column) {
     char player_win = '0';
     if (row == column) {
