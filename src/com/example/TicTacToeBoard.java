@@ -1,22 +1,19 @@
 package com.example;
 
-import java.util.Locale;
-
 /**
  * Takes in and evaluates a string representing a tic tac toe board.
  */
 public class TicTacToeBoard {
 
   //set to fixed size until I can figure out how to assign it during creation
-  private char[][] grid = new char[3][3];
-  private double board_length;
+  private char[][] gameGrid = new char[3][3];
+  private int boardLength;
 
-  //initalize variables to track characters and # of completed rows
-  private int xcount = 0;
-  private int ocount = 0;
-  private int xwins = 0;
-  private int owins = 0;
-  private char result = ' ';
+  //initialize variables to track characters and # of completed rows
+  private int xCount = 0;
+  private int oCount = 0;
+  private int xWinCount = 0;
+  private int oWinCount = 0;
 
   /**
    * This method should load a string into your TicTacToeBoard class.
@@ -26,96 +23,35 @@ public class TicTacToeBoard {
   public TicTacToeBoard(String board) {
 
     //check length of input string
-    board_length = Math.sqrt(board.length());
-    assert board_length % 1 == 0 : "Invalid Board Dimensions";
+    assert (Math.sqrt(board.length()) % 1 == 0 && board.length() > 8) : "Invalid Board Dimensions";
+    boardLength = (int) Math.sqrt(board.length());
 
     //check characters of string and add them to grid, counting Xs and Os
-    int k = 0;
-    for (int i = 0; i < board_length; i++) {
-      for (int j = 0; j < board_length; j++) {
-        if (board.charAt(k) == 'x' || board.charAt(k) == 'X') {
-          grid[i][j] = 'x';
-          xcount++;
-        } else if (board.charAt(k) == 'o' || board.charAt(k) == 'O') {
-          grid[i][j] = 'o';
-          ocount++;
+    for (int i = 0; i < boardLength; i++) {
+      for (int j = 0; j < boardLength; j++) {
+        if (board.charAt(i + j) == 'x') {
+          gameGrid[i][j] = 'x';
+          xCount++;
+        } else if (board.charAt((i + j)) == 'o') {
+          gameGrid[i][j] = 'o';
+          oCount++;
         }
-        k++;
       }
     }
 
-    //look at xcount and ocount to determine if board is valid
-    if (xcount - ocount > 1 || ocount > xcount) {
-      result = '0';
-      return;
-    }
-    //check if X or O wins, track wins with xwins and owins
-    for (int i = 0; i < board_length; i++)
+    //check if X or O wins, track wins
+    for (int i = 0; i < boardLength; i++)
     {
-      for (int j = 0; j < board_length; j++) {
+      for (int j = 0; j < boardLength; j++) {
         if ((i == 0 && j > 0) || (j == 0 && i > 0) || (i == 0 && j == 0)) {
-          if (HorizontalCheck(i, j) == 'x' || VerticalCheck(i, j) == 'x' || DiagonalCheck(i, j) == 'x') {
-            xwins++;
+          if (HorizontalCheck(i, 'x') || VerticalCheck(i, 'x') || DiagonalCheck('x')) {
+            xWinCount++;
           }
-          else if (HorizontalCheck(i, j) == 'o' || VerticalCheck(i, j) == 'o' || DiagonalCheck(i, j) == 'o') {
-            owins++;
+          else if (HorizontalCheck(i, 'o') || VerticalCheck(i, 'o')|| DiagonalCheck('o')) {
+            oWinCount++;
           }
         }
       }
-    }
-
-    //check that # of wins are valid
-    if (owins > 0 && xwins == 0) {
-      result = 'o';
-    }
-    else if (xwins > 0 && owins == 0) {
-      result = 'x';
-    }
-  }
-
-  //checks characters horizontally, matching to starting character
-  private char HorizontalCheck(int row, int column) {
-    char player_win = '0';
-    for (int j = 0; j < board_length - 1; j++)
-    {
-      if (grid[row][j] != grid[row][j + 1]) {
-         return player_win;
-      }
-    }
-    player_win = grid[row][column];
-    return player_win;
-  }
-
-  //checks characters vertically, matching to starting character
-  private char VerticalCheck(int row, int column) {
-    char player_win = '0';
-    for (int i = 0; i < board_length - 1; i++)
-    {
-      if (grid[i][column] != grid[i + 1][column]) {
-        return player_win;
-      }
-    }
-    player_win = grid[row][column];
-    return player_win;
-  }
-
-  //checks characters diagonally, matching to starting character
-  private char DiagonalCheck(int row, int column) {
-    char player_win = '0';
-    if (row == column) {
-      for (int i = 0; i < board_length - 1; i++)
-      {
-        if (grid[row][column] != grid[row + 1][column + 1]) {
-          return player_win;
-        }
-        column++;
-        row++;
-      }
-      player_win = grid[row][column];
-      return player_win;
-    }
-    else {
-      return player_win;
     }
   }
 
@@ -125,19 +61,50 @@ public class TicTacToeBoard {
    * @return an enum value corresponding to the board evaluation
    */
   public Evaluation evaluate() {
-    switch (result) {
-      case '0': {
-        return Evaluation.UnreachableState;
-      }
-      case 'x': {
-        return Evaluation.Xwins;
-      }
-      case 'o': {
-        return Evaluation.Owins;
-      }
-      default: {
-        return Evaluation.NoWinner;
+
+    //look at xCount and oCount to determine if board is valid
+    if (xCount - oCount > 1 || oCount > xCount) {
+      return Evaluation.UnreachableState;
+    } else if (oWinCount == 0 && xWinCount == 0) {
+      return Evaluation.NoWinner;
+    } else if (oWinCount > 0 && xWinCount == 0) {
+      return Evaluation.Owins;
+    } else if (xWinCount > 0 && oWinCount == 0) {
+      return Evaluation.Xwins;
+    } else {
+      return Evaluation.UnreachableState;
+    }
+  }
+
+  //checks characters horizontally, matching to starting character
+  private boolean HorizontalCheck(int row, char player) {
+    for (int j = 0; j < boardLength - 1; j++) {
+      if (gameGrid[row][j] != player || gameGrid[row][j] != gameGrid[row][j + 1]) {
+        return false;
       }
     }
+    return true;
+  }
+
+  //checks characters vertically, matching to starting character
+  private boolean VerticalCheck(int column, char player) {
+    for (int i = 0; i < boardLength - 1; i++)
+    {
+      if (gameGrid[i][column] != player || gameGrid[i][column] != gameGrid[i + 1][column]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  //checks characters diagonally, matching to starting character
+  private boolean DiagonalCheck(char player) {
+    for (int i = 0; i < boardLength - 1; i++)
+    {
+      if (gameGrid[i][i] != player || gameGrid[i][i] != gameGrid[i + 1][i + 1]) {
+        return false;
+      }
+    }
+    return true;
   }
 }
