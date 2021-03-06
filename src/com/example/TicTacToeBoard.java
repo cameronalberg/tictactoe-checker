@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.Locale;
+
 /**
  * Takes in and evaluates a string representing a tic tac toe board.
  */
@@ -21,33 +23,43 @@ public class TicTacToeBoard {
    * @param board The string representing the board
    */
   public TicTacToeBoard(String board) {
+    int boardPosition = 0;
 
     //check length of input string
     assert (Math.sqrt(board.length()) % 1 == 0 && board.length() > 8) : "Invalid Board Dimensions";
     boardLength = (int) Math.sqrt(board.length());
     gameGrid  = new char[boardLength][boardLength];
+    board = board.toLowerCase();
+
     //check characters of string and add them to grid, counting Xs and Os
     for (int i = 0; i < boardLength; i++) {
       for (int j = 0; j < boardLength; j++) {
-        if (board.charAt(i + j) == 'x') {
+        if (board.charAt(boardPosition) == 'x') {
           gameGrid[i][j] = 'x';
           xCount++;
-        } else if (board.charAt((i + j)) == 'o') {
+        } else if (board.charAt(boardPosition) == 'o') {
           gameGrid[i][j] = 'o';
           oCount++;
         }
+        boardPosition++;
       }
     }
 
-    //check if X or O wins, track wins
+    //check for diagonals separately (only starting at top two corners)
+    if (DiagonalCheck('x') > 0) {
+      xWinCount += (DiagonalCheck('x'));
+    }
+    if (DiagonalCheck('o') > 0) {
+      oWinCount += (DiagonalCheck('o'));
+    }
+    //check if X or O wins horizontally and vertically, track wins
     for (int i = 0; i < boardLength; i++)
     {
       for (int j = 0; j < boardLength; j++) {
-        if ((i == 0 && j > 0) || (j == 0 && i > 0) || (i == 0 && j == 0)) {
-          if (HorizontalCheck(i, 'x') || VerticalCheck(i, 'x') || DiagonalCheck('x')) {
+        if ((i == 0 && j > 0) || (j == 0 && i > 0)) {
+          if (HorizontalCheck(i, 'x') || VerticalCheck(i, 'x')) {
             xWinCount++;
-          }
-          else if (HorizontalCheck(i, 'o') || VerticalCheck(i, 'o')|| DiagonalCheck('o')) {
+          } else if (HorizontalCheck(i, 'o') || VerticalCheck(i, 'o')) {
             oWinCount++;
           }
         }
@@ -97,14 +109,26 @@ public class TicTacToeBoard {
     return true;
   }
 
-  //checks characters diagonally, matching to starting character
-  private boolean DiagonalCheck(char player) {
-    for (int i = 0; i < boardLength - 1; i++)
-    {
+  //checks characters diagonally, returns 0, 1 or 2 wins found
+  private int DiagonalCheck(char player) {
+    int winCount = 0;
+    boolean diagRight = true;
+    boolean diagLeft = true;
+
+    for (int i = 0; i < boardLength - 1; i++) {
       if (gameGrid[i][i] != player || gameGrid[i][i] != gameGrid[i + 1][i + 1]) {
-        return false;
+        diagRight = false;
+      }
+      if (gameGrid[i][boardLength - i - 1] != player || gameGrid[i][boardLength - i - 1] != gameGrid[i + 1][boardLength - i - 2]) {
+        diagLeft = false;
       }
     }
-    return true;
+    if (diagRight){
+      winCount++;
+    }
+    if (diagLeft){
+      winCount++;
+    }
+    return winCount;
   }
 }
