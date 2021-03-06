@@ -45,16 +45,16 @@ public class TicTacToeBoard {
       }
     }
 
-    //check for diagonals separately (only starting at top two corners)
+    //check for diagonals first, no need to check during loop
     if (DiagonalCheck('x') > 0) {
       xWinCount += (DiagonalCheck('x'));
     }
     if (DiagonalCheck('o') > 0) {
       oWinCount += (DiagonalCheck('o'));
     }
+
     //check if X or O wins horizontally and vertically, track wins
-    for (int i = 0; i < boardLength; i++)
-    {
+    for (int i = 0; i < boardLength; i++) {
       for (int j = 0; j < boardLength; j++) {
         if ((i == 0 && j > 0) || (j == 0 && i > 0)) {
           if (HorizontalCheck(i, 'x') || VerticalCheck(i, 'x')) {
@@ -90,8 +90,8 @@ public class TicTacToeBoard {
 
   //checks characters horizontally, matching to starting character
   private boolean HorizontalCheck(int row, char player) {
-    for (int j = 0; j < boardLength - 1; j++) {
-      if (gameGrid[row][j] != player || gameGrid[row][j] != gameGrid[row][j + 1]) {
+    for (int i = 0; i < boardLength - 1; i++) {
+      if (gameGrid[row][i] != player || gameGrid[row][i] != gameGrid[row][i + 1]) {
         return false;
       }
     }
