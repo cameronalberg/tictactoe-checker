@@ -4,6 +4,28 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class TicTacToeBoardTest {
+
+  /*
+   * assertion error tests - should return assertion error: Invalid Board Dimensions
+   @Test
+   public void testInvalidBoardWrongNumChars() {
+     TicTacToeBoard board = new TicTacToeBoard("aaaa-b--b-");
+     board.evaluate();
+   }
+
+   @Test
+   public void testInvalidBoardTooSmall() {
+     TicTacToeBoard board = new TicTacToeBoard("xo-x");
+     board.evaluate();
+   }
+
+   @Test
+   public void testInvalidBoardEmptyBoard() {
+     TicTacToeBoard board = new TicTacToeBoard("");
+     board.evaluate();
+   }
+   */
+
   @Test
   public void testValidBoardNoWinner() {
     TicTacToeBoard board = new TicTacToeBoard("O...X.X..");
@@ -111,27 +133,4 @@ public class TicTacToeBoardTest {
     TicTacToeBoard board = new TicTacToeBoard("xoxoxoxox");
     assertEquals(Evaluation.Xwins, board.evaluate());
   }
-
- /*
-  * assertion error tests - should return assertion error: Invalid Board Dimensions
-  @Test
-  public void testInvalidBoardWrongNumChars() {
-    TicTacToeBoard board = new TicTacToeBoard("aaaa-b--b-");
-    board.evaluate();
-  }
-
-  @Test
-  public void testInvalidBoardTooSmall() {
-    TicTacToeBoard board = new TicTacToeBoard("xo-x");
-    board.evaluate();
-  }
-
-  @Test
-  public void testInvalidBoardEmptyBoard() {
-    TicTacToeBoard board = new TicTacToeBoard("");
-    board.evaluate();
-  }
-
-  */
-
 }
