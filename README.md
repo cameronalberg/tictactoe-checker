@@ -1,2 +1,2 @@
 # tic-tac-toe-java
-Starter code for the Java Tic Tac Toe assignment
+Program that evaluates a given tic-tac-toe board and determines if it is possible to reach the given board state.
